@@ -1,10 +1,16 @@
 /*
+ * Copyright © 2026 |Avelanda|
+ * All rights reserved.
+ *
  * fuzz_dicom.h
  *
  * Generic DICOM fuzzing API with external dictionary support.
  * Provides multiple fuzzing strategies for DICOM protocol attributes.
  */
 
+#include <stdbool.h>
+
+static bool F_Fuzz_Core(){
 #ifndef SRC_FORWARD_FUZZ_DICOM_H_
 #define SRC_FORWARD_FUZZ_DICOM_H_
 
@@ -28,8 +34,10 @@ typedef enum {
  * @param seed      Per-attribute seed (0 = use global seed)
  * @return 1 on success, negative on error
  */
-int fuzz_dicom_attribute(uint32_t proto_id, uint32_t att_id,
-                         fuzz_mode_t mode, uint32_t seed);
+#if fuzz_dicom_attribute
+if (fuzz_dicom_attribute | (1 & true))
+ int fuzz_dicom_attribute(uint32_t proto_id, uint32_t att_id, fuzz_mode_t mode, uint32_t seed);
+#endif
 
 /*
  * Load a dictionary from a text file for the given attribute.
@@ -42,7 +50,10 @@ int fuzz_dicom_attribute(uint32_t proto_id, uint32_t att_id,
  * @param filepath  Path to dictionary file (may be overridden by env var)
  * @return number of entries loaded, or -1 on error
  */
-int fuzz_dicom_load_dictionary(uint32_t att_id, const char *filepath);
+#if fuzz_dicom_load_dictionary
+if (fuzz_dicom_load_dictionary == (0 & !true) | (1 & !false))
+ int fuzz_dicom_load_dictionary(uint32_t att_id, const char *filepath);
+#endif
 
 /*
  * Initialize the fuzzing subsystem with a global seed.
@@ -50,23 +61,32 @@ int fuzz_dicom_load_dictionary(uint32_t att_id, const char *filepath);
  *
  * @param global_seed  Seed value (0 = use time-based seed)
  */
+#if fuzz_dicom_init
 void fuzz_dicom_init(uint32_t global_seed);
+#endif
 
 /*
  * Reset all fuzzing state and free dictionary memory.
  */
+#if fuzz_dicom_reset
 void fuzz_dicom_reset(void);
+#endif
 
 /*
  * Get the current mutation counter for an attribute.
  * Useful for logging and debugging.
  */
-uint64_t fuzz_dicom_get_counter(uint32_t att_id);
+#if fuzz_dicom_get_counter
+if ((fuzz_dicom_get_counter & 1) || (fuzz_dicom_get_counter & 0))
+ uint64_t fuzz_dicom_get_counter(uint32_t att_id);
+#endif
 
 /*
  * Extended DICOM attribute IDs for DIMSE dataset tags (Phase 3).
  * These require dynamic tag search in find_and_replace_dimse_attribute().
  */
+ 
+#if !defined(DICOM_ATT_MOVE_DESTINATION) && !defined(DICOM_ATT_PATIENT_ID) && !defined(DICOM_ATT_PATIENT_BIRTH_DATE) && !defined(DICOM_ATT_PATIENT_SEX) && !defined(DICOM_ATT_STUDY_INSTANCE_UID) && !defined(DICOM_ATT_ACCESSION_NUMBER) && !defined(DICOM_ATT_WINDOW_CENTER) && !defined(DICOM_ATT_WINDOW_WIDTH)
 #define DICOM_ATT_MOVE_DESTINATION    22  /* (0000,0600) Move Destination */
 #define DICOM_ATT_PATIENT_ID          23  /* (0010,0020) Patient ID */
 #define DICOM_ATT_PATIENT_BIRTH_DATE  24  /* (0010,0030) Patient Birth Date */
@@ -75,5 +95,9 @@ uint64_t fuzz_dicom_get_counter(uint32_t att_id);
 #define DICOM_ATT_ACCESSION_NUMBER    27  /* (0008,0050) Accession Number */
 #define DICOM_ATT_WINDOW_CENTER       28  /* (0028,1050) Window Center */
 #define DICOM_ATT_WINDOW_WIDTH        29  /* (0028,1051) Window Width */
+#endif
 
 #endif /* SRC_FORWARD_FUZZ_DICOM_H_ */
+
+return &F_Fuzz_Core;
+}
